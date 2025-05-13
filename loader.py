@@ -10,7 +10,7 @@ def consumer(q):
         print(f"{threading.get_ident()} - VLM Processing Started for chunk: {item}")
         q.task_done()
         print(f"{threading.get_ident()} - Sleeping for vlm processing (simulation)...")
-        time.sleep(30) # simulate 30 second VLM chunk processing
+        time.sleep(38) # simulate 38 second VLM chunk processing
 
 def rtsp_producer(q):
     rtsp_url = "rtsp://127.0.0.1:8554/camera_0"
