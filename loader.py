@@ -3,14 +3,14 @@ import queue
 import time
 import cv2
 
-def consumer(q):
+def consumer(q, processing_delay=38):
     while True:
-        print(f"{threading.get_ident()} - Get item for vlm processing...")
+        print(f"{threading.get_ident()} - Get item for vlm processing with processing_delay {processing_delay}...")
         item = q.get(block=True, timeout=None)
         print(f"{threading.get_ident()} - VLM Processing Started for chunk: {item}")
         q.task_done()
         print(f"{threading.get_ident()} - Sleeping for vlm processing (simulation)...")
-        time.sleep(38) # simulate 38 second VLM chunk processing
+        time.sleep(processing_delay) # simulate 38 second VLM chunk processing
 
 def rtsp_producer(q):
     rtsp_url = "rtsp://127.0.0.1:8554/camera_0"
@@ -57,9 +57,9 @@ if __name__ == "__main__":
    
     print("starting vlm processing thread")
     c = threading.Thread(target=consumer, args=(q,), daemon=True)
-    threading.Thread(target=consumer, args=(q2,), daemon=True).start()
-    threading.Thread(target=consumer, args=(q3,), daemon=True).start()
-    threading.Thread(target=consumer, args=(q4,), daemon=True).start()
+    threading.Thread(target=consumer, args=(q2,40), daemon=True).start()
+    threading.Thread(target=consumer, args=(q3,60), daemon=True).start()
+    threading.Thread(target=consumer, args=(q4,75), daemon=True).start()
     c.start()
 
     # camera 1 simulation thread
