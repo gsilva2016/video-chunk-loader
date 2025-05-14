@@ -23,6 +23,7 @@ def rtsp_producer(q):
     i = 0
     chunk_size = 15 * 30 # 15fps * 30 for 30second chunk
     chunkIdx = 0
+    dropped_frames = 0
     while True:        
         try:
             start_time = time.time()
@@ -47,7 +48,8 @@ def rtsp_producer(q):
             print(f"{threading.get_ident()} - Produced Chunk {chunkIdx} at frame index {i}")
             # Yields ~51750ms latency between 30 second chunk generation
         except queue.Full:
-            print(f"{threading.get_ident()} - Queue is full! Dropping frame {i}")
+            dropped_frames+=1
+            print(f"{threading.get_ident()} - Queue is full! Dropping frame {i}. Total dropped: {dropped_frames}")
 
 if __name__ == "__main__":
     q = queue.Queue(maxsize=10)
